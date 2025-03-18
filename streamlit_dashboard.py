@@ -3,8 +3,6 @@ import streamlit as st
 import pandas as pd
 import pydeck as pdk
 import json
-import subprocess
-from gpt4all import GPT4All
 
 code_to_name = get_data_from_file('data/code_to_name.pkl')
 sorted_pairs_by_exemptions = get_data_from_file(
