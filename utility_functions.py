@@ -24,9 +24,14 @@ def generate_response(input_text, openai_api_key, df_in_migration, df_out_migrat
             ("human", "{input_text}"),
         ]
     )
-    model = ChatOpenAI(model="gpt-4o", temperature=0.7, api_key=openai_api_key)
+    model = ChatOpenAI(model="gpt-4o-mini", temperature=0.7,
+                       api_key=openai_api_key)
     chain = prompt | model
-    return chain.invoke(input_text)
+    try:
+        answer = chain.invoke(input_text)
+    except Exception as e:
+        answer = e
+    return answer
 
 
 def plot_map(migration_sorted, code_to_name):
