@@ -242,13 +242,15 @@ st.subheader("Ask a question about the migration data:")
 
 openai_api_key = st.text_input("OpenAI API Key", type="password")
 
-context_prompt = ""
+context_prompt = "Instructions: Answer the following user query as if you were an assistant providing information on migration between US counties. Keep your answers to less than 200 words, about county migration and use formal English language. Query:"
 
 with st.form("my_form"):
     text = st.text_area(
         "Enter query:")
+    query = context_prompt + text
     submitted = st.form_submit_button("Submit")
     if not openai_api_key.startswith("sk-"):
         st.warning("Please enter your OpenAI API key!", icon="⚠")
     if submitted and openai_api_key.startswith("sk-"):
-        generate_response(text)
+        answer = generate_response(text)
+        st.info(answer)
