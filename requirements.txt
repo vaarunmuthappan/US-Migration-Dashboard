@@ -1,3 +1,5 @@
+langchain_core==0.3.45
+langchain_ollama==0.2.3
 pandas==2.2.3
 plotly==5.22.0
 pydeck==0.9.1
