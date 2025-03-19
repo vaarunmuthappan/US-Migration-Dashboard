@@ -77,44 +77,6 @@ def get_ny_data(code_to_name):
     return ny_data
 
 
-def create_sankey_diagram(dataframe):
-    # Create lists of all unique labels (nodes)
-    all_nodes = sorted(
-        list(set(dataframe["initial"].tolist() + dataframe["final"].tolist())))
-
-    # Create a mapping from node labels to indices
-    node_indices = {node: i for i, node in enumerate(all_nodes)}
-
-    # Create source and target arrays
-    sources = [node_indices[initial] for initial in dataframe["initial"]]
-    targets = [node_indices[final] for final in dataframe["final"]]
-    values = dataframe["value"].tolist()
-
-    # Create the Sankey diagram
-    fig = go.Figure(data=[go.Sankey(
-        node=dict(
-            pad=15,
-            thickness=20,
-            line=dict(color="black", width=0.5),
-            label=all_nodes,
-            color="blue"
-        ),
-        link=dict(
-            source=sources,
-            target=targets,
-            value=values
-        )
-    )])
-
-    fig.update_layout(
-        title_text=f"Sankey Diagram",
-        font_size=12,
-        height=600
-    )
-
-    return fig
-
-
 @st.cache_data
 def get_df_cleaned(sorted_pairs_by_exemptions, code_to_name):
     df_interactions = pd.DataFrame(sorted_pairs_by_exemptions, columns=[
