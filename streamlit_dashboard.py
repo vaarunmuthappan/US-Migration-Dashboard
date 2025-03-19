@@ -250,5 +250,6 @@ with st.form("my_form"):
     if not openai_api_key.startswith("sk-"):
         st.warning("Please enter your OpenAI API key!", icon="⚠")
     if submitted and openai_api_key.startswith("sk-"):
-        answer = generate_response(input)
+        answer = generate_response(
+            input, openai_api_key, df_in_migration, df_out_migration)
         st.info(answer.content)
