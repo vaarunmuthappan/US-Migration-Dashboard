@@ -138,7 +138,7 @@ with col2:
 st.subheader("Net Migration to the New York metropolitan area counties")
 new_york_data = get_ny_data(code_to_name)
 st.bar_chart(new_york_data, x="County", y=[
-             "In-Migration", "Out-Migration"], color=["#8fbc8f", "#FF7276"], stack="layered")
+             "In-Migration", "Out-Migration"], color=["#8fbc8f", "#FF7276"], stack="False")
 
 
 st.subheader("Explore the migration data:")
