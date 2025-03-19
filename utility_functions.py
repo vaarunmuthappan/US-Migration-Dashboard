@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 from collections import defaultdict
 import pickle
-import plotly.graph_objects as go
 import plotly.express as px
 from shapely.geometry import shape
 from langchain_openai.chat_models import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
 
 
 def get_data_from_file(file):
@@ -15,8 +15,18 @@ def get_data_from_file(file):
 
 
 def generate_response(input_text, openai_api_key):
-    model = ChatOpenAI(temperature=0.7, api_key=openai_api_key)
-    return model.invoke(input_text)
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                "system",
+                "Instructions: Answer the following user query as if you were an assistant providing information on migration between US counties. Keep your answers to less than 200 words, about county migration and use formal English language. Query:",
+            ),
+            ("human", "{input_text}"),
+        ]
+    )
+    model = ChatOpenAI(model="gpt-4o", temperature=0.7, api_key=openai_api_key)
+    chain = prompt | model
+    return chain.invoke(input_text)
 
 
 def plot_map(migration_sorted, code_to_name):
