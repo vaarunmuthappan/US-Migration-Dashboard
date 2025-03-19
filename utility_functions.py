@@ -16,7 +16,7 @@ def get_data_from_file(file):
 
 def generate_response(input_text, openai_api_key):
     model = ChatOpenAI(temperature=0.7, api_key=openai_api_key)
-    st.info(model.invoke(input_text))
+    return model.invoke(input_text)
 
 
 def plot_map(migration_sorted, code_to_name):
