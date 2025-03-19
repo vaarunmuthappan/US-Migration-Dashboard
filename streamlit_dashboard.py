@@ -1,4 +1,4 @@
-from utility_functions import get_data_from_file, get_ny_data, plot_map, get_df_cleaned, make_choropleth
+from utility_functions import get_data_from_file, get_ny_data, plot_map, get_df_cleaned, make_choropleth, generate_response
 import streamlit as st
 import pandas as pd
 import pydeck as pdk
@@ -179,7 +179,7 @@ col = st.columns((2, 2, 2), gap="medium")
 with col[0]:
     # In-Migration Card (Green)
     st.markdown(f"""
-    <div style="padding: 20px; border-radius: 15px; background-color: {in_bg_color}; margin-bottom: 20px;">
+    <div style="padding: 20px; border-radius: 15px; background-color: {in_bg_color}; margin-bottom: 20px;border: 3px solid {in_color};">
         <h3 style="color: {in_color};">In-Migration</h3>
         <h2 style="color: {in_color}; font-size: 36px;">{in_migration:,}</h2>
         <p>People moved into this county</p>
@@ -189,7 +189,7 @@ with col[0]:
 with col[1]:
     # Out-Migration Card (Red)
     st.markdown(f"""
-        <div style="padding: 20px; border-radius: 15px; background-color: {out_bg_color}; margin-bottom: 20px;">
+        <div style="padding: 20px; border-radius: 15px; background-color: {out_bg_color}; margin-bottom: 20px;border: 3px solid {out_color};">
             <h3 style="color: {out_color};">Out-Migration</h3>
             <h2 style="color: {out_color}; font-size: 36px;">{out_migration:,}</h2>
             <p>People moved out of this county</p>
@@ -203,7 +203,7 @@ with col[2]:
     net_bg_color = "whitesmoke"
     net_sign = "+" if net_migration > 0 else ""
     st.markdown(f"""
-    <div style="padding: 20px; border-radius: 15px; background-color: {net_bg_color}; margin-bottom: 20px;">
+    <div style="padding: 20px; border-radius: 15px; background-color: {net_bg_color}; margin-bottom: 20px;border: 3px solid {net_color};">
         <h3 style="color: {net_color};">Net Migration</h3>
         <h2 style="color: {net_color}; font-size: 36px;">{net_sign}{net_migration:,}</h2>
         <p>{"Population gain" if net_migration >= 0 else "Population loss"}</p>
@@ -240,22 +240,15 @@ with col[1]:
 st.write("")
 st.subheader("Ask a question about the migration data:")
 
-# Path to the downloaded model
-model_path = "Llama-3.2-1B-Instruct-Q4_0_4_4.gguf"
+openai_api_key = st.text_input("OpenAI API Key", type="password")
 
-# Load the GPT4All model
-
-# Context Prompt
 context_prompt = ""
-# User input
-user_input = st.text_area("Enter your question here:")
-# Combined question with context
-combined_input = context_prompt + user_input
 
-if st.button("Get Answer"):
-    if user_input:
-
-        st.write("### Answer:")
-        st.write(combined_input)
-    else:
-        st.write("Please enter a question.")
+with st.form("my_form"):
+    text = st.text_area(
+        "Enter query:")
+    submitted = st.form_submit_button("Submit")
+    if not openai_api_key.startswith("sk-"):
+        st.warning("Please enter your OpenAI API key!", icon="⚠")
+    if submitted and openai_api_key.startswith("sk-"):
+        generate_response(text)
