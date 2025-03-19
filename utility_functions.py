@@ -5,12 +5,18 @@ import pickle
 import plotly.graph_objects as go
 import plotly.express as px
 from shapely.geometry import shape
+from langchain_openai.chat_models import ChatOpenAI
 
 
 def get_data_from_file(file):
     with open(file, 'rb') as file:
         opened = pickle.load(file)
     return opened
+
+
+def generate_response(input_text, openai_api_key):
+    model = ChatOpenAI(temperature=0.7, api_key=openai_api_key)
+    st.info(model.invoke(input_text))
 
 
 def plot_map(migration_sorted, code_to_name):
