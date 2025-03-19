@@ -14,12 +14,12 @@ def get_data_from_file(file):
     return opened
 
 
-def generate_response(input_text, openai_api_key):
+def generate_response(input_text, openai_api_key, df_in_migration, df_out_migration):
     prompt = ChatPromptTemplate.from_messages(
         [
             (
                 "system",
-                "Instructions: Answer the following user query as if you were an assistant providing information on migration between US counties. Keep your answers to less than 200 words, about county migration and use formal English language. Query:",
+                f"Instructions: Answer the following user query as if you were an assistant providing information on migration between US counties. Keep your answers to less than 200 words, about county migration and use formal English language. Where possible refer to in-migration and out-migration dataframes: {df_in_migration} and {df_out_migration} respectively.",
             ),
             ("human", "{input_text}"),
         ]
